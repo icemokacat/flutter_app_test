@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_kot_swift/screen/home_screen.dart';
 
 void main() {
   runApp(
@@ -8,23 +9,3 @@ void main() {
   );
 }
 
-// widget
-class HomeScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.amber,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            'asset/img/logo.png',
-          ),
-          const CircularProgressIndicator(
-            color: Colors.white,
-          ),
-        ],
-      ),
-    );
-  }
-}

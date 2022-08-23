@@ -1,41 +1,48 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
-class HomeScreen extends StatelessWidget {
-  WebViewController? controller;
-  final homeUrl = 'https://www.black-cat.online';
+class HomeScreen extends StatefulWidget {
+  final Color color;
 
-  HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({
+    required this.color,
+    Key? key,
+  }) : super(key: key){
+    print('Widget Constructor 실행!');
+  }
+
+  @override
+  State<HomeScreen> createState() {
+    print('createState 실행!');
+    return _HomeScreenState();
+  }
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  @override
+  void initState() {
+    print('initState 실행!');
+    super.initState();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    print('setState 실행!');
+    super.setState(fn);
+  }
+
+  @override
+  void didChangeDependencies() {
+    print('didChangeDependencies 실행!');
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.orange,
-        title: Text("Black-cat"),
-        centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: () {
-                // 기본적으로 http 로 접속하는 것을 막고 있음
-                if(controller == null){return;}
-                controller!.loadUrl(homeUrl);
-              },
-              icon: Icon(
-                Icons.home,
-              )
-          )
-        ],
-      ),
-      body: WebView(
-        // 웹뷰가 만들어 졌을때 실행
-        onWebViewCreated: (WebViewController controller) {
-          this.controller = controller;
-        },
-        initialUrl: homeUrl,
-        javascriptMode: JavascriptMode.unrestricted,
-      ),
+    return Container(
+      width: 50.0,
+      height: 50.0,
+      color: widget.color,
     );
   }
 }

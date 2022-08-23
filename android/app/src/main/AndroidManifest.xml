@@ -1,9 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.conn.flutter_app_kot_swift">
+
+    <!-- 앱 권한 설정 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
    <application
         android:label="flutter_app_kot_swift"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true"
+       >
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

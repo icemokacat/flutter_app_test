@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,57 +12,145 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Timer? timer;
-  PageController controller = PageController(
-    initialPage: 0,
-  );
-
   @override
   void initState() {
     super.initState();
-
-    timer = Timer.periodic(Duration(seconds: 4), (timer) {
-      int currentPage = controller.page!.toInt();
-      int nextPage    = currentPage+1;
-
-      if(nextPage > 4){
-        nextPage = 0;
-      }
-
-      controller.animateToPage(
-          nextPage,
-          duration: Duration(milliseconds: 400),
-          curve: Curves.linear
-      );
-    });
   }
 
   @override
   void dispose() {
-    controller.dispose();
-    if(timer != null){
-      timer!.cancel();
-    }
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     // 앱 상단 상태바
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle.dark
-    );
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return Scaffold(
-      body: PageView(
-        controller: controller,
-        children: [1,2,3,4,5].map((e) =>
-          Image.asset('asset/img/image_$e.jpeg',
-          fit: BoxFit.cover),
-        ).toList(),
+        backgroundColor: Colors.pink[100],
+        body: SafeArea(
+          bottom: false,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [_TopPart(), _BottomPart()],
+            ),
+          ),
+        ));
+  }
+}
+
+class _TopPart extends StatefulWidget {
+  const _TopPart({Key? key}) : super(key: key);
+
+  @override
+  State<_TopPart> createState() => _TopPartState();
+}
+
+class _TopPartState extends State<_TopPart> {
+  DateTime selectedDate = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final now = DateTime.now();
+
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(
+            'U&I',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'parisienne',
+              fontSize: 80.0,
+            ),
+          ),
+          Column(
+            children: [
+              Text(
+                '우리 처음 만난날',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'sunflower',
+                  fontSize: 30.0,
+                ),
+              ),
+              Text(
+                '${selectedDate.year}.${selectedDate.month}.${selectedDate.day}',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'sunflower',
+                  fontSize: 20.0,
+                ),
+              ),
+            ],
+          ),
+          IconButton(
+            iconSize: 60.0,
+            onPressed: () {
+              // dialog
+              showCupertinoDialog(
+                  context: context,
+                  barrierDismissible: true, // 위젯 영역 밖을 클릭하면 닫힘
+                  builder: (BuildContext context) {
+                    return Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        // 특정 위젯이 어디에 정렬해야 할지 모르면 모든 영역을 차지함
+                        color: Colors.white,
+                        height: 300.0,
+                        child: CupertinoDatePicker(
+                          mode: CupertinoDatePickerMode.date,
+                          initialDateTime: selectedDate,
+                          maximumDate: DateTime(
+                            now.year,
+                            now.month,
+                            now.day
+                          ),
+                          onDateTimeChanged: (DateTime date) {
+                            setState(() {
+                              selectedDate = date;
+                            });
+                          },
+                        ),
+                      ),
+                    );
+                  });
+            },
+            icon: Icon(
+              Icons.favorite,
+              color: Colors.red,
+            ),
+          ),
+          Text(
+            'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays + 1}',
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'sunflower',
+              fontSize: 50.0,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
       ),
     );
+  }
+}
+
+class _BottomPart extends StatelessWidget {
+  const _BottomPart({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: Image.asset(
+      'asset/img/middle_image.png',
+    ));
   }
 }

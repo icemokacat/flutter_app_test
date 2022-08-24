@@ -18,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int number = 0;
 
   @override
   void initState() {
@@ -26,9 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void setState(VoidCallback fn) {
-    print('setState 실행!');
-    super.setState(fn);
+  void didUpdateWidget(covariant HomeScreen oldWidget) {
+    print('didUpdateWidget 실행!');
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -38,11 +39,36 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void deactivate() {
+    print('deactivate 실행!');
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    print('dispose 실행!');
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 50.0,
-      height: 50.0,
-      color: widget.color,
+    print('build 실행!');
+
+    // 행동하는 액션이 있었을때 명령을 내릴 수 있는 위젯
+    return GestureDetector(
+      onTap: (){
+        setState(() {
+          number++;
+        });
+      },
+      child: Container(
+        width: 50.0,
+        height: 50.0,
+        color: widget.color,
+        child: Center(
+          child: Text(number.toString()),
+        ),
+      ),
     );
   }
 }

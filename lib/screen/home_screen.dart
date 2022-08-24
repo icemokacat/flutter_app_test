@@ -1,73 +1,66 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
-  final Color color;
-
-  HomeScreen({
-    required this.color,
-    Key? key,
-  }) : super(key: key){
-    print('Widget Constructor 실행!');
-  }
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() {
-    print('createState 실행!');
-    return _HomeScreenState();
-  }
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int number = 0;
+  Timer? timer;
+  PageController controller = PageController(
+    initialPage: 0,
+  );
 
   @override
   void initState() {
-    print('initState 실행!');
     super.initState();
-  }
 
-  @override
-  void didUpdateWidget(covariant HomeScreen oldWidget) {
-    print('didUpdateWidget 실행!');
-    super.didUpdateWidget(oldWidget);
-  }
+    timer = Timer.periodic(Duration(seconds: 4), (timer) {
+      int currentPage = controller.page!.toInt();
+      int nextPage    = currentPage+1;
 
-  @override
-  void didChangeDependencies() {
-    print('didChangeDependencies 실행!');
-    super.didChangeDependencies();
-  }
+      if(nextPage > 4){
+        nextPage = 0;
+      }
 
-  @override
-  void deactivate() {
-    print('deactivate 실행!');
-    super.deactivate();
+      controller.animateToPage(
+          nextPage,
+          duration: Duration(milliseconds: 400),
+          curve: Curves.linear
+      );
+    });
   }
 
   @override
   void dispose() {
-    print('dispose 실행!');
+    controller.dispose();
+    if(timer != null){
+      timer!.cancel();
+    }
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('build 실행!');
 
-    // 행동하는 액션이 있었을때 명령을 내릴 수 있는 위젯
-    return GestureDetector(
-      onTap: (){
-        setState(() {
-          number++;
-        });
-      },
-      child: Container(
-        width: 50.0,
-        height: 50.0,
-        color: widget.color,
-        child: Center(
-          child: Text(number.toString()),
-        ),
+    // 앱 상단 상태바
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.dark
+    );
+
+    return Scaffold(
+      body: PageView(
+        controller: controller,
+        children: [1,2,3,4,5].map((e) =>
+          Image.asset('asset/img/image_$e.jpeg',
+          fit: BoxFit.cover),
+        ).toList(),
       ),
     );
   }
